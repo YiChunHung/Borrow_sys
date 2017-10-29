@@ -1,38 +1,25 @@
 import React from 'react';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import TopBar from 'components/TopBar.jsx'
 
 export default class Main extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      isOpen: false
-    };
+  constructor(props) {
+        super(props);
+        this.state = {
+          pageNum:1
+        }
+        this.handleChangePage = this.handleChangePage.bind(this);
+  };
+
+  handleChangePage(val){
+    this.setState({pageNum:val});
   }
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-  render() {
-    return (
-      <div>
-        <Navbar color="faded" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
+
+
+  render(){
+    return(
+      <TopBar onUpdate={this.handleChangePage}/>
+
     );
   }
 }
