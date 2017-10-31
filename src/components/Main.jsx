@@ -1,5 +1,7 @@
 import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import MineCalendar from 'components/Calendar.jsx';
+import Calendar from 'react-calendar';
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -15,6 +17,7 @@ export default class Main extends React.Component {
       isOpen: !this.state.isOpen
     });
   }
+
   render() {
     return (
       <div>
@@ -32,7 +35,9 @@ export default class Main extends React.Component {
             </Nav>
           </Collapse>
         </Navbar>
+        <Calendar />
       </div>
     );
   }
 }
+
