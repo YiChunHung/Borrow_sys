@@ -1,5 +1,6 @@
 import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import TimeTable from 'components/TimeTable.jsx'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -18,6 +19,10 @@ export default class Main extends React.Component {
   render() {
     return (
       <div>
+      <TimeTable/>
+      </div>
+      /*
+      <div>
         <Navbar color="faded" light expand="md">
           <NavbarBrand href="/">reactstrap</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
@@ -33,6 +38,8 @@ export default class Main extends React.Component {
           </Collapse>
         </Navbar>
       </div>
+      */
+
     );
   }
 }
