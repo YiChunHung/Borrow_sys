@@ -9,7 +9,7 @@ export default class Main extends React.Component {
           pageNum:1
         }
         this.handleChangePage = this.handleChangePage.bind(this);
-  };
+  }
 
   handleChangePage(val){
     this.setState({pageNum:val});
@@ -19,7 +19,6 @@ export default class Main extends React.Component {
   render(){
     return(
       <TopBar onUpdate={this.handleChangePage}/>
-
     );
   }
 }
