@@ -1,15 +1,28 @@
 import React from 'react';
 import Calendar from 'react-calendar';
- 
-class MineCalendar extends React.Component {
-  state = {
-    date: new Date(),
+
+export default class MyCalendar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: new Date(),
+      choose: new Date()
+    };
+  }
+  
+  onChange(date){
+    this.setState({
+      date: date.getDate()
+    });
   }
   
   render() {
     return (
       <div>
-        <Calendar onChange={this.state.date} />
+        <Calendar 
+          onChange={this.onChange}
+          onClickDay={this.onClickDay}
+        />
       </div>
     );
   }

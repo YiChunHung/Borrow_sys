@@ -1,7 +1,6 @@
 import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
-import MineCalendar from 'components/Calendar.jsx';
-import Calendar from 'react-calendar';
+import MyCalendar from 'components/Calendar.jsx';
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -9,34 +8,30 @@ export default class Main extends React.Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      click: new Date()
     };
   }
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
 
+  onClickDay(choose){
+  	this.setState({
+  	  click: choose
+  	});
+  }
+
   render() {
     return (
       <div>
-        <Navbar color="faded" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </Navbar>
-        <Calendar />
-      </div>
+      	<MyCalendar
+      	   onClick={this.onClickDay}	
+      	/>
+      </div>	
     );
   }
 }

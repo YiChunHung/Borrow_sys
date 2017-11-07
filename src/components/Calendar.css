@@ -1,0 +1,9 @@
+.Calendar {
+	float: right;
+	background-color: blue;
+
+}
+
+.Calendar.onChange{
+	background-color: : yellow;
+}
