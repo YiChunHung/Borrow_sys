@@ -5,14 +5,27 @@ import ButtonTimeDelete from 'components/ButtonTimeDelete.jsx';
 import 'components/TimeTable.css';
 
 function ButtonChoosing(props){
-	if (props.notAvailable) {
-		return (
-			<ButtonTimeDelete item={props.item}/>
-		)
-	} else {
-		return (
-			<ButtonTimeAvailable/>
-		)
+	console.log(props.date.length)
+	console.log(props.date[props.time].item[0])
+	console.log(props.time)
+	for (var i = 0; i<props.date[props.time].item.length ; i++) {
+		if(props.date[props.time].item[i].length==0){
+			return(
+				<td> <ButtonTimeAvailable/> </td>
+			)
+		} else {
+			const buttondelete = props.date.map(
+				button => <ButtonTimeDelete item={props.date[props.time].item[i].name} />
+			);
+
+			return(
+				<td>
+					{buttondelete}
+				</td>
+			)
+		}
+
+
 	}
 }
 
@@ -39,29 +52,36 @@ export default class TimeTable extends React.Component{
 			},{
 				date:
 			}*/],
-			back:[{
-				id: 3,
-				item: 'pen',
-				date: '11/01',
-				morning: true,
-				afternoon: true,
-				night: false
-			}, {
-				id: 4,
-				item: 'pen',
-				date: '11/03',
-				morning: false,
-				afternoon: true,
-				night: true
-			}, {
-				id: 5,
-				item: 'room',
-				date: '11/01',
-				morning: false,
-				afternoon: true,
-				night: true
-			}]
-
+			tableDate: [
+				{
+					item:[{
+						name: ['pen','room'],
+						id: 3
+					},{
+						name: [],
+						id: 4
+					}]
+				},
+				{
+					item:[{
+						name: ['room'],
+						id: 5
+					},{
+						name: [],
+						id: 6
+					}]
+				},
+				{
+					item:[{
+						name: [],
+						id: 7
+					},{
+						name: ['pen'],
+						id: 8
+					}]
+				}
+			
+			]
 
 		}
 	}
@@ -71,7 +91,7 @@ export default class TimeTable extends React.Component{
 	render(){
 		const head = this.state.frontDate.map(
 			front => <td key={front.id}> {front.date} </td>
-		);
+		);/*
 		const rowMorning = this.state.back.map(
 			morning => 	
 				<td key={morning.id}>
@@ -89,7 +109,7 @@ export default class TimeTable extends React.Component{
 				<td key={night.id}>
 				<ButtonChoosing notAvailable={night.night} item={night.item}/>
 				</td>
-		);
+		);*/
 
 
 		return (
@@ -103,15 +123,15 @@ export default class TimeTable extends React.Component{
      			<tbody>
      				<tr>
      					<td>Morning</td>
-     					{rowMorning}
+     					<ButtonChoosing date={this.state.tableDate} time={0}/>
      				</tr>
      				<tr>
      					<td>Afternoon</td>
-     					{rowAfternoon}
+     					<ButtonChoosing date={this.state.tableDate} time={1}/>
      				</tr>
      				<tr>
      					<td>Night</td>
-     					{rowNight}
+     					<ButtonChoosing date={this.state.tableDate} time={2}/>
      				</tr>
      			</tbody>
      		</table>
