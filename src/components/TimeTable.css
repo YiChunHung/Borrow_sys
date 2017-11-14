@@ -1,12 +1,6 @@
-.Table{
-	width: 100%;
+.Table td{
+	border: 1px solid black;
+
 }
 
-.Date{
-	width: 12.5%;
-	text-align: center;
-}
 
-.td{
-	width: 12.5%;
-}
