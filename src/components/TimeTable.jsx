@@ -36,7 +36,7 @@ export default class TimeTable extends React.Component{
 
 	render(){
 		const head = this.state.frontDate.map(
-			front => <td key={front.id}> {front.date} </td>
+			front => <td> {front.date} </td>
 		);
 		const rowMorning = this.state.tableDate[0].item.map(
 			ButtonChoosing
