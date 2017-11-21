@@ -13,9 +13,11 @@ export default class ButtonTimeAvailable extends React.Component{
 	}
 
 	toggle(){
+		//console.log(this.props.onChange);
 		this.setState(
 			{isSelected: !this.state.isSelected}
 		);
+		this.props.onChange();
 	}
 
 	render(){
