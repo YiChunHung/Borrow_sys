@@ -1,0 +1,58 @@
+.Calendar {
+  width: 30%;
+  height: 100%;
+}
+.Calendar-header {
+  height: 8%;
+  width:98%;
+  background: #333;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  font-size: 100%;
+  justify-content: space-around;
+}
+
+.Calendar-header button {
+  width: 98%;
+  font-size: 100%;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.Calendar-header button:focus{
+  outline:none;
+}
+
+.Calendar-grid-item {
+  position: relative;
+  display: inline-block;
+  width: 14%;
+  font-size: 20%;
+  justify-content: space-between;
+}
+
+.Calendar-grid-item.prevMonth button:disabled{
+  color: red;
+}
+.Calendar-grid-item.nextMonth button:disabled{
+  color:red;
+}
+
+.Calendar-grid-item button{
+  width:100%;
+  align-content: center;
+}
+
+.Calendar-grid-item button:focus{
+  outline:none;
+}
+
+.Week-day{
+  text-align: center;
+  width: 14%;
+  display: inline-block;
+  background-color: yellow;
+}
