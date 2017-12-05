@@ -9,17 +9,44 @@ import DATA from 'components/data.json'
 export default class TimeTable extends React.Component{
 	constructor(props){
 		super(props);
-		this.handleClick = this.handleClick.bind(this);
+		this.handleDeletedClick = this.handleDeletedClick.bind(this);
+		this.handleAvailbleClick = this.handleAvailbleClick.bind(this);
 		this.handleBlockTime = this.handleBlockTime.bind(this);
 		this.handleFrontTime = this.handleFrontTime.bind(this);
 		this.state = {
-			create:[]
+			create:[],
+			delete:[]
 		};
 	};
 
-	handleClick(time){
-		//console.log(time);
-		//var stateVar = this.state.create;
+	handleDeletedClick(sid){
+		const deletedItemArray = {sid:sid};
+
+		const isDeletedDuplicate = this.state.delete.map(
+			function(deleteItem){
+				if(deleteItem.sid==sid)
+					return true;
+				else
+					return false;
+			}
+		);	
+
+		if(isDeletedDuplicate.includes(true)){
+			this.setState(
+				{delete:this.state.delete.filter(
+					function(e, i){
+						return !isDeletedDuplicate[i];
+					}
+				)}
+			);
+		} else {
+			this.setState(
+				{delete:this.state.delete.concat(deletedItemArray)}
+			);
+		}
+	};
+
+	handleAvailbleClick(time){
 		const itemArray = this.props.item.map(
 			function(item){
 				var createNew = {
@@ -29,20 +56,15 @@ export default class TimeTable extends React.Component{
 				return createNew;
 			}
 		);
-		//console.log(itemArray);
 		const isDuplicate = this.state.create.map(
 			function(create){
-				//console.log(create.date[0]);
-				//console.log(time[0]);
 				if (create.date[0].toString()==time[0].toString()) 
-					return true
-				 else 
-					return false
+					return true;
+				else 
+					return false;
 			}
 		);
-		//console.log(isDuplicate);
 		if(isDuplicate.includes(true)){
-			//console.log(1);
 			this.setState(
 				{create:this.state.create.filter(
 					function(e, i){
@@ -55,9 +77,9 @@ export default class TimeTable extends React.Component{
 				{create:this.state.create.concat(itemArray)}
 			);
 		}
-		//console.log(this.state.create);
 	};
-	handleBlockTime(block, handleClick){
+
+	handleBlockTime(block, handleAvailbleClick, handleDeletedClick){
 		const timeBlocks = {
 			"morning":{
 				"start":[8,0,0],
@@ -76,7 +98,8 @@ export default class TimeTable extends React.Component{
 			var timeBlock = {
 				"start":new Date(dateIn.date),
 				"end":new Date(dateIn.date),
-				"name": []
+				"name": [],
+				"sid" : []
 			};
 			timeBlock.start.setHours(timeBlocks[block].start[0],timeBlocks[block].start[1],timeBlocks[block].start[2]);
 			timeBlock.end.setHours(timeBlocks[block].end[0],timeBlocks[block].end[1],timeBlocks[block].end[2]);
@@ -84,17 +107,18 @@ export default class TimeTable extends React.Component{
 			for(var i=0; i<API.payload.length; i++){
 				var APIstart = new Date(API.payload[i].time_start);
 				if(timeBlock.start.toString() == APIstart.toString()){
-					timeBlock.name.push(API.payload[i].iid);
+					var itemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
+					timeBlock.name.push(itemId);
 				}
 			}
 			if (timeBlock.name.length==0) {
 				return(
-					<td key={index}> <ButtonTimeAvailable onChange={handleClick} time={[timeBlock.start,timeBlock.end]}/> </td>
+					<td key={index}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[timeBlock.start,timeBlock.end]}/> </td>
 				)
 			} else {
 				const buttonDelete = timeBlock.name.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} item={item}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={item.iid} sid={item.sid}/>)
 					}
 				);
 				return(
@@ -122,19 +146,17 @@ export default class TimeTable extends React.Component{
 			}
 		);
 
-		//console.log(this.state.create.item)
-
 		const head = frontDate.map(
 			this.handleFrontTime
 		);
 		const rowMorning = frontDate.map(
-			this.handleBlockTime("morning",this.handleClick)
+			this.handleBlockTime("morning",this.handleAvailbleClick, this.handleDeletedClick)
 		);
 		const rowAfternoon = frontDate.map(
-			this.handleBlockTime("afternoon",this.handleClick)
+			this.handleBlockTime("afternoon",this.handleAvailbleClick, this.handleDeletedClick)
 		);
 		const rowNight = frontDate.map(
-			this.handleBlockTime("night",this.handleClick)
+			this.handleBlockTime("night",this.handleAvailbleClick, this.handleDeletedClick)
 		);
 		return (
      		<table className="Table">
