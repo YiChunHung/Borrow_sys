@@ -18,31 +18,22 @@ export default class Borrowpage extends React.Component {
 		const className = e.target.className;
 		const isPicked = this.state.selectedDays.includes(className);
 		
-		if (this.state.selectedDays.length <= 6){
-			if (isPicked){
-				this.setState({
-					selectedDays: this.state.selectedDays.filter(function(item){
-										return item != className
-									})
-				})
-			}
-			else{
+		
+		if (isPicked){
+			this.setState({
+				selectedDays: this.state.selectedDays.filter(function(item){
+												return item != className
+											})
+			})
+		}
+		else{
+			if (this.state.selectedDays.length <= 6){
 				this.setState({
 					selectedDays: [...this.state.selectedDays, className]
 				})
-
 			}
-		}
-		else{
-			if (isPicked){
-				this.setState({
-					selectedDays: this.state.selectedDays.filter(function(item){
-										return item != className
-									})
-				})
-			}
-			else{
-				alert('選擇天數不能超過七天')
+			else {
+				alert('選擇天數不可超過七天')
 			}
 		}
 	}

@@ -14,8 +14,7 @@ export default class Calendar extends React.Component {
 		this.handleNextMonth = this.handleNextMonth.bind(this);
 		this.weekDay = this.weekDay.bind(this);
 		this.state = {
-			weekOffset: 0,
-			weekday: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+			weekOffset: 0
 		};
 	}
 
@@ -74,10 +73,11 @@ export default class Calendar extends React.Component {
 	}
 
 	render() {
+		const weekday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 		return(
 			<div className="Calendar">
 				{this.renderHeader(this.props.date, this.handlePrevMonth, this.handleNextMonth)}
-				{this.state.weekday.map(this.weekDay)}
+				{weekday.map(this.weekDay)}
 				{CreatDateObject(this.props.date, 0).map(this.renderDay)}			
 			</div>
 		);
