@@ -17,7 +17,8 @@ export default class Borrowpage extends React.Component {
       "routes": {"cors": true}
     })
     .then(function(response) {
-      console.log(response)
+      var item_iid = response.data.payload.map(function(item){return(item.iid)}) 
+      var item_name = response.data.payload.map(function(item){return(item.item_name)})
     });
     this.state = {
     	selectedItems: [],
