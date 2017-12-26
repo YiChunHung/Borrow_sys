@@ -79,52 +79,120 @@ export default class TimeTable extends React.Component{
 		}
 	};
 
-	handleBlockTime(block, handleAvailbleClick, handleDeletedClick){
+	handleBlockTime(handleAvailbleClick, handleDeletedClick){
 		const timeBlocks = {
-			"morning":{
+			"morning":
+			{
 				"start":[8,0,0],
 				"end":[11,59,59]
 			},
-			"afternoon":{
+			"afternoon":
+			{
 				"start":[12,0,0],
 				"end":[17,59,59]
 			},
-			"night":{
+			"night":
+			{
 				"start":[18,0,0],
 				"end":[23,59,59]
 			}
 		}
 		return function(dateIn, index){
-			var timeBlock = {
+			var morningBlock = {
 				"start":new Date(dateIn.date),
 				"end":new Date(dateIn.date),
 				"name": [],
 				"sid" : []
 			};
-			timeBlock.start.setHours(timeBlocks[block].start[0],timeBlocks[block].start[1],timeBlocks[block].start[2]);
-			timeBlock.end.setHours(timeBlocks[block].end[0],timeBlocks[block].end[1],timeBlocks[block].end[2]);
+			morningBlock.start.setHours(timeBlocks.morning.start[0],timeBlocks.morning.start[1],timeBlocks.morning.start[2]);
+			morningBlock.end.setHours(timeBlocks.morning.end[0],timeBlocks.morning.end[1],timeBlocks.morning.end[2]);
+
+			var afternoonBlock = {
+				"start":new Date(dateIn.date),
+				"end":new Date(dateIn.date),
+				"name": [],
+				"sid" : []
+			};
+			afternoonBlock.start.setHours(timeBlocks.afternoon.start[0],timeBlocks.afternoon.start[1],timeBlocks.afternoon.start[2]);
+			afternoonBlock.end.setHours(timeBlocks.afternoon.end[0],timeBlocks.afternoon.end[1],timeBlocks.afternoon.end[2]);
+
+			var nightBlock = {
+				"start":new Date(dateIn.date),
+				"end":new Date(dateIn.date),
+				"name": [],
+				"sid" : []
+			};
+			nightBlock.start.setHours(timeBlocks.night.start[0],timeBlocks.night.start[1],timeBlocks.night.start[2]);
+			nightBlock.end.setHours(timeBlocks.night.end[0],timeBlocks.night.end[1],timeBlocks.night.end[2]);
 
 			for(var i=0; i<API.payload.length; i++){
 				var APIstart = new Date(API.payload[i].time_start);
-				if(timeBlock.start.toString() == APIstart.toString()){
-					var itemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
-					timeBlock.name.push(itemId);
+				if(morningBlock.start.toString() == APIstart.toString()){
+					var morningItemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
+					morningBlock.name.push(morningItemId);
+				}
+				if(afternoonBlock.start.toString() == APIstart.toString()){
+					var afternoonItemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
+					afternoonBlock.name.push(afternoonItemId);
+				}
+				if(nightBlock.start.toString() == APIstart.toString()){
+					var nightItemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
+					nightBlock.name.push(nightItemId);
 				}
 			}
-			if (timeBlock.name.length==0) {
-				return(
-					<td key={index}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[timeBlock.start,timeBlock.end]}/> </td>
-				)
+
+			var morningButton;
+			var afternoonButton; 
+			var nightButton;
+
+			if (morningBlock.name.length==0) {
+				morningButton = (
+					<td key={index}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[morningBlock.start,morningBlock.end]}/> </td>
+				);
+				
 			} else {
-				const buttonDelete = timeBlock.name.map(
+				const morningButtonDelete = morningBlock.name.map(
 					function(item, index){
 						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={item.iid} sid={item.sid}/>)
 					}
 				);
-				return(
-					<td key={index}> {buttonDelete} </td>
+				morningButton = (
+					<td key={index}> {morningButtonDelete} </td>
+				);
+			}
+
+			if (afternoonBlock.name.length==0) {
+				afternoonButton = (
+					<td key={index+7}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[afternoonBlock.start,afternoonBlock.end]}/> </td>
+				)
+			} else {
+				const afternoonButtonDelete = afternoonBlock.name.map(
+					function(item, index){
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={item.iid} sid={item.sid}/>)
+					}
+				);
+				afternoonButton = (
+					<td key={index+7}> {afternoonButtonDelete} </td>
 				)
 			}
+
+			if (nightBlock.name.length==0) {
+				nightButton = (
+					<td key={index+14}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[nightBlock.start,nightBlock.end]}/> </td>
+				)
+			} else {
+				const nightButtonDelete = nightBlock.name.map(
+					function(item, index){
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={item.iid} sid={item.sid}/>)
+					}
+				);
+				nightButton = (
+					<td key={index+14}> {nightButtonDelete} </td>
+				)
+			}
+
+			const Button = [morningButton, afternoonButton, nightButton];
+			return Button;
 		};
 	}
 
@@ -149,15 +217,26 @@ export default class TimeTable extends React.Component{
 		const head = frontDate.map(
 			this.handleFrontTime
 		);
-		const rowMorning = frontDate.map(
-			this.handleBlockTime("morning",this.handleAvailbleClick, this.handleDeletedClick)
+		const row = frontDate.map(
+			this.handleBlockTime(this.handleAvailbleClick, this.handleDeletedClick)
 		);
-		const rowAfternoon = frontDate.map(
-			this.handleBlockTime("afternoon",this.handleAvailbleClick, this.handleDeletedClick)
+
+		const rowMorning = row.map(
+			function(date){
+				return date[0]
+			}
 		);
-		const rowNight = frontDate.map(
-			this.handleBlockTime("night",this.handleAvailbleClick, this.handleDeletedClick)
+		const rowAfternoon = row.map(
+			function(date){
+				return date[1]
+			}
 		);
+		const rowNight = row.map(
+			function(date){
+				return date[2]
+			}
+		);
+
 		return (
      		<table className="Table">
      			<thead>

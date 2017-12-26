@@ -1,5 +1,6 @@
 import React from 'react';
-import "components/ButtonTimeAvailable.css"
+import axios from 'axios';
+import "components/ButtonTimeAvailable.css";
 
 export default class ButtonTimeAvailable extends React.Component{
 	constructor(props){
@@ -18,6 +19,19 @@ export default class ButtonTimeAvailable extends React.Component{
 			{isSelected: !this.state.isSelected}
 		);
 		this.props.onChange(this.props.time);
+
+		/*var API = axios({
+			//method:'get',
+			url:'http://140.114.84.187:5000/api/items/read',
+			headers: {"Access-Control-Allow-Origin": "*"}
+		});*/
+		var API = axios.get(
+			'http://140.114.84.187:5000/api/items/read',{
+				headers:{"Access-Control-Allow-Origin": "*"}
+			}
+		) 
+
+		console.log(API);
 	}
 
 	render(){

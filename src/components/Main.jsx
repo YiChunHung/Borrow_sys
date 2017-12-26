@@ -20,7 +20,8 @@ export default class Main extends React.Component {
     const Testdate = [
       {date:"2017-12-03 00:00:00"},
       {date:"2017-12-01 00:00:00"},
-      {date:"2017-11-20 00:00:00"}
+      {date:"2017-11-20 00:00:00"},
+      {date:"2017-12-20 00:00:00"}
     ];
 
     const Testitem = [
