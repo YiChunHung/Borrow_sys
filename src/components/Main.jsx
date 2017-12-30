@@ -1,38 +1,39 @@
 import React from 'react';
+import TopBar from 'components/TopBar.jsx'
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import Borrowpage from 'components/Borrowpage.jsx'
 
 export default class Main extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      isOpen: false
-    };
+  constructor(props) {
+        super(props);
+        this.state = {
+          pageNum:1
+        }
+        this.handleChangePage = this.handleChangePage.bind(this);
+  		this.switchPage = this.switchPage.bind(this);
   }
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
+
+  handleChangePage(val){
+    this.setState({pageNum:val});
   }
-  render() {
-    return (
-      <div>
-        <Navbar color="faded" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
+
+  switchPage(){ 	
+  	if (this.state.pageNum==2){
+  		return (
+  			<Borrowpage />
+  		)
+  	}
+  }
+
+
+  render(){
+
+    return(
+    	<div>
+      		<TopBar onUpdate={this.handleChangePage}/>
+      		{this.switchPage()}
+      	</div>
     );
   }
 }

@@ -1,0 +1,50 @@
+.Schedule {
+    background-color: #e7e7e7; 
+    color: black; 
+    border: 0px solid #e7e7e7;
+    border-radius: 12px;
+}
+
+.Schedule:hover {
+    background-color: #4CAF50;
+    color: white;
+    border: none #4CAF50;
+    border-radius: 12px;
+}
+.Schedule:focus{
+    outline:none;
+}
+
+.BorrowSys {
+    background-color: #e7e7e7; 
+    color: black; 
+    border: 0px solid #e7e7e7;
+    border-radius: 12px;
+}
+
+.BorrowSys:hover {
+    background-color: #4CAF50;
+    color: white;
+    border: 0px #4CAF50;
+    border-radius: 12px;
+}
+.BorrowSys:focus{
+    outline:none;
+}
+
+.Server {
+    background-color: #e7e7e7; 
+    color: black; 
+    border: 0px solid #e7e7e7;
+    border-radius: 12px ;
+}
+
+.Server:hover {
+    background-color: #4CAF50;
+    color: white;
+    border: 0px #4CAF50;
+    border-radius: 12px;
+}
+.Server:focus{
+    outline:none;
+}
