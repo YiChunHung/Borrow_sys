@@ -1,0 +1,24 @@
+{
+  "action": "read", 
+  "object": "items", 
+  "payload": [
+    {
+      "iid": 1, 
+      "item_name": "Projector", 
+      "notes": ""
+    }, 
+    {
+      "iid": 26, 
+      "item_name": "book_test", 
+      "notes": "1"
+    }, 
+    {
+      "iid": 27, 
+      "item_name": "proj_test", 
+      "notes": "2"
+    }
+  ], 
+  "server_time": "2017-12-30 17:21:16", 
+  "uid": 0, 
+  "validation": 0
+}

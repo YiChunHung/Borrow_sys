@@ -1,0 +1,13 @@
+.buttonDelete{
+	border-radius: 50px;
+	border: outset;
+	background-color: tomato; 
+	width: 25px;
+	height: 25px;
+	text-align: center;
+	padding: 0px;
+}
+
+.p{
+	margin: auto;
+}

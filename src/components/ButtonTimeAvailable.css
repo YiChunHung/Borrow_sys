@@ -1,0 +1,12 @@
+.button_1{
+	width: 10em;
+	height: 10em;
+	font-size: 10px;
+	border: none;
+	
+}
+.button_1:focused{
+	width: 10em;
+	height: 2.5em;
+	border: none;
+}
