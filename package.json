@@ -15,6 +15,7 @@
     "dependencies": {
         "axios": "^0.17.1",
         "bootstrap": "^4.0.0-beta",
+        "moment": "^2.20.1",
         "react": "^15.4.2",
         "react-dom": "^15.4.2",
         "reactstrap": "^5.0.0-alpha.3"
