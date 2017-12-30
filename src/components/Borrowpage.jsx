@@ -10,32 +10,6 @@ import ITEM from 'components/item.json';
 export default class Borrowpage extends React.Component {
   constructor(props) {
     super(props);
-
-    const ax = axios.create({
-      baseURL: 'http://localhost:7070/components'
-    })
-    ax.get('testdata.json')
-    /*
-    axios({
-      method:'get',
-      url:'/Users/winston/Desktop/Borrow_sys/src/components/testdata.json',
-      params: {'operator_uid':0},
-      headers: {
-        'Access-Control-Allow-Origin': 'http://140.114.84.187:5000/',
-      },
-      timeout: 1000,
-      "routes": {"cors": true}
-    })
-    .then(function(response) {
-      var item_iid = response.data.payload.map(function(item){return(item.iid)}); 
-      var item_name = response.data.payload.map(function(item){return(item.item_name)});
-      var item = response.data.payload.map(function(item){return [item.iid, item.item_name]});
-      //console.log(item_iid)
-      //console.log(item_name)
-      self.setState({id: item_iid, name: item_name})
-      return item;
-    });
-    */
     this.state = {
       date: moment(),
       selectedDays: [],
@@ -86,30 +60,7 @@ export default class Borrowpage extends React.Component {
       }
     }
   }
-  /*
-  loadData() {
-    var self = this;
-    return axios({
-      method:'get',
-      url:'http://140.114.84.187:5000/api/items/read',
-      params: {'operator_uid':0},
-      headers: {
-        'Access-Control-Allow-Origin': 'http://140.114.84.187:5000/',
-      },
-      timeout: 1000,
-      "routes": {"cors": true}
-    })
-    .then(function(response) {
-      var item_iid = response.data.payload.map(function(item){return(item.iid)}); 
-      var item_name = response.data.payload.map(function(item){return(item.item_name)});
-      var item = response.data.payload.map(function(item){return [item.iid, item.item_name]});
-      //console.log(item_iid)
-      //console.log(item_name)
-      self.setState({id: item_iid, name: item_name})
-      return item;
-    });
-  }
-  */
+  
   restoreItems(item) {
     this.setState({
       item: [...this.state.item, item],

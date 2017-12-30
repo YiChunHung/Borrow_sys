@@ -6,9 +6,12 @@ export default class TopBar extends React.Component{
     constructor(props) {
         super(props);
         this.handleTopBarClick = this.handleTopBarClick.bind(this);
-    };
-    handleTopBarClick(e){
-        var pageNum = {
+
+};
+
+handleTopBarClick(e){
+
+var pageNum = {
             "Schedule":1,
             "BorrowSys":2,
             "Server":3
@@ -19,7 +22,8 @@ export default class TopBar extends React.Component{
 
 
     }
-    render() {
+
+render() {
         return (
           <div>
             <Navbar color="faded" light expand="md">
