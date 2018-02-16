@@ -1,5 +1,5 @@
 {
-	"baseURL" : "http://140.114.84.187",
+	"baseURL" : "http://140.114.19.30",
 	"port" : ":5000",
 	"prefix" : "/api"
 
