@@ -62,16 +62,21 @@ export default class Borrowpage extends React.Component {
   
   toggleItemList(item) {
     const isPicked = this.state.selectedItems.includes(item);
-    this.setState({
-      item: this.state.item.filter(function(stuff){return(stuff != item)})
-    })
+    if (!this.state.disabled){
+      this.setState({
+        item: this.state.item.filter(function(stuff){return(stuff != item)})
+      })
+    }
   
-    if (isPicked != 'True') {
+    if (!isPicked && !this.state.disabled) {
       this.setState({
         selectedItems: [...this.state.selectedItems, item],
         selectedItemIIDs: [...this.state.selectedItemIIDs, this.state.item2id[item]]
       })
-    }  
+    }
+    else{
+      alert('If you want to reselect, please reload the page.[ctrl+R]');
+    }
   }
 
   toggleCalendar(e) {
@@ -79,7 +84,7 @@ export default class Borrowpage extends React.Component {
     const isPicked = this.state.selectedDays.includes(className);
     
     
-    if (isPicked){
+    if (isPicked && this.state.disabled == false){
       this.setState({
         selectedDays: this.state.selectedDays.filter(function(item){
                         return item != className
@@ -93,7 +98,7 @@ export default class Borrowpage extends React.Component {
         })
       }
       else {
-        alert('ERROR')
+        alert('If you want to reselect, please reload the page.[ctrl+R]');
       }
     }
   }
