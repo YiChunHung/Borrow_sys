@@ -31,32 +31,33 @@ export default class Borrowpage extends React.Component {
     this.readItem()
   }
 
-  readItem() {
-    axios({
+  async readItem() {
+    await axios({
       method:'get',
       url: '/items/read',
       baseURL:config.baseURL + config.port + config.prefix,
-      params: {'operator_uid':0},
-      headers: {
-        'Access-Control-Allow-Origin': 'http://140.114.84.187:5000/',
-      },
+      params: {'operator_uid':this.props.uid, 'token':this.props.token},
       timeout: 1000,
     })
     .then(function(response) {
-      var item_iid = response.data.payload.map(function(item){return(item.iid)}); 
-      var item_name = response.data.payload.map(function(item){return(item.item_name)});
-      var item = response.data.payload.map(function(item){return [item.iid, item.item_name]});
-      var item2id = {};
-      var id2item = {};
-      for (var i = 0 ; i < item_iid.length ; i++) {
-        item2id[item_name[i]] = item_iid[i];
-        id2item[item_iid[i]] = item_name[i];
+      if (!response.data.validation) {
+        var item_iid = response.data.payload.map(function(item){return(item.iid)}); 
+        var item_name = response.data.payload.map(function(item){return(item.item_name)});
+        var item = response.data.payload.map(function(item){return [item.iid, item.item_name]});
+        var item2id = {};
+        var id2item = {};
+        for (var i = 0 ; i < item_iid.length ; i++) {
+          item2id[item_name[i]] = item_iid[i];
+          id2item[item_iid[i]] = item_name[i];
+        }
+        this.setState({
+          item:['- Select -', ...item_name],
+          item2id: item2id,
+          id2item: id2item
+        })
+      } else {
+        alert("Please reload!!")
       }
-      this.setState({
-        item:['- Select -', ...item_name],
-        item2id: item2id,
-        id2item: id2item
-      })
     }.bind(this));
   }
   
@@ -82,8 +83,7 @@ export default class Borrowpage extends React.Component {
   toggleCalendar(e) {
     const className = e.target.className;
     const isPicked = this.state.selectedDays.includes(className);
-    
-    
+       
     if (isPicked && this.state.disabled == false){
       this.setState({
         selectedDays: this.state.selectedDays.filter(function(item){
@@ -189,19 +189,23 @@ export default class Borrowpage extends React.Component {
       method:'post',
       url: '/status/read',
       baseURL:config.baseURL + config.port + config.prefix,
-      params: {'operator_uid':0},
+      params: {'operator_uid':this.props.uid, 'token':this.props.token},
       data: {
         'data': itemData
       },
-      headers: {
-        'Access-Control-Allow-Origin': 'http://140.114.84.187:5000/',
-      },
       timeout: 1000,
-    }).then(function(response){this.setState({
-      statusReadResponse: response.data.payload, 
-      disabled:true,
-      isShowTimeTable: true
-    })}.bind(this))
+    }).then(function(response){
+      if (!response.data.validation) {
+        this.setState({
+        statusReadResponse: response.data.payload, 
+        disabled:true,
+        isShowTimeTable: true
+        })
+        console.log(this.state.statusReadResponse)
+      } else {
+        alert("Something Wrong with seleted items and dates!! Please reload the web.");
+      }
+    }.bind(this))
     
   }
 
@@ -214,6 +218,8 @@ export default class Borrowpage extends React.Component {
                         item={this.state.selectedItemIIDs}
                         id2item={this.state.id2item}
                         statusReadResponse={this.state.statusReadResponse}
+                        uid={this.props.uid}
+                        token={this.props.token}
                     />
                   </div>);
     }

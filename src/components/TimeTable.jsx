@@ -134,22 +134,24 @@ export default class TimeTable extends React.Component{
 			for(var i=0; i<classObj.props.statusReadResponse.length; i++){
 				var APIstart = new Date(classObj.props.statusReadResponse[i].time_start);
 				if(morningBlock.start.toString() == APIstart.toString()){
-					var morningItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid}
+					var morningItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid}
 					morningBlock.id.push(morningItemId);
 				}
 				if(afternoonBlock.start.toString() == APIstart.toString()){
-					var afternoonItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid}
+					var afternoonItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid}
 					afternoonBlock.id.push(afternoonItemId);
 				}
 				if(nightBlock.start.toString() == APIstart.toString()){
-					var nightItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid}
+					var nightItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid}
 					nightBlock.id.push(nightItemId);
 				}
 			}
-			console.log(morningBlock)
+
 			var morningButton;
 			var afternoonButton; 
 			var nightButton;
+
+			//console.log(classObj.props)
 
 			if (morningBlock.id.length==0) {
 				morningButton = (
@@ -159,7 +161,7 @@ export default class TimeTable extends React.Component{
 			} else {
 				const morningButtonDelete = morningBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}/>)
 					}
 				);
 				morningButton = (
@@ -174,7 +176,7 @@ export default class TimeTable extends React.Component{
 			} else {
 				const afternoonButtonDelete = afternoonBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}/>)
 					}
 				);
 				afternoonButton = (
@@ -189,7 +191,7 @@ export default class TimeTable extends React.Component{
 			} else {
 				const nightButtonDelete = nightBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}/>)
 					}
 				);
 				nightButton = (
@@ -210,33 +212,75 @@ export default class TimeTable extends React.Component{
 		)
 	}
 
-	handleOutput(){
-		console.log(this.state.create)
-		//console.log(config.baseURL+config.port+config.prefix)
+	async handleOutput(){
 		
 		if (this.state.create.length){
-			axios({
+			await axios({
 				method:'post',
 				url:'/tickets/create',
 				baseURL:config.baseURL+config.port+config.prefix,
+				params:{'operator_uid':this.props.uid, 'token':this.props.token},
 				data:{
 					"data":this.state.create,
-					"operator_uid":0
 				}
-			});
+			}).then(async function(response){
+				if (!response.data.validation) {
+					if (this.state.delete.length) {
+						await axios({
+							method:'delete',
+							url:'/status/delete',
+							baseURL:config.baseURL+config.port+config.prefix,
+							params:{'operator_uid':this.props.uid, 'token':this.props.token},
+							data:{
+								"sid":this.state.delete
+							}
+						}).then(function(response){
+							if (!response.data.validation) {
+								alert("Success!");
+							} else {
+								alert("Deletion Failed !");
+							}
+
+						});
+					} else {
+						alert("Success!")
+					}
+				} else {
+					alert("Borrow Failed !");
+				}
+			}.bind(this));
+		} else {
+			if (this.state.delete.length) {
+				await axios({
+					method:'delete',
+					url:'/status/delete',
+					baseURL:config.baseURL+config.port+config.prefix,
+					params:{'operator_uid':this.props.uid, 'token':this.props.token},
+					data:{
+						"sid":this.state.delete
+					}
+				}).then(function(response){
+					if (!response.data.validation) {
+						alert("Success");
+					} else {
+						alert("Deletion Failed !");
+					}
+
+				});
+			}
 		}
 
-		if (this.state.delete.length) {
-			axios({
+		/*if (this.state.delete.length) {
+			await axios({
 				method:'delete',
 				url:'/status/delete',
 				baseURL:config.baseURL+config.port+config.prefix,
+				params:{'operator_uid':this.props.uid, 'token':this.props.token},
 				data:{
-					"operator_uid":0,
 					"sid":this.state.delete
 				}
 			});
-		}
+		}*/
 
 		window.location.reload();
 
