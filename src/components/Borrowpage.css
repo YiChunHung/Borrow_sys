@@ -1,17 +1,9 @@
 #ItemList {
-	width: 100%;
-	height: 50%;
-	position: absolute;
-	top: 10%;
-	left: 0%;
+
 }
 
 #Calendar {
-	width: 200%;
-	height: 100%;
-	position: absolute;
-	top : 10%;
-	left : 40%;
+
 }
 
 #TimeTable {
@@ -25,9 +17,7 @@
 #sendDateId {
 	width: 11%;
 	height: 5%;
-	position: absolute;
-	top: 45%;
-	left: 64%;
+
 }
 
 #sendDateId:focus {

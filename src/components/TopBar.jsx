@@ -25,7 +25,7 @@ var pageNum = {
 
 render() {
         return (
-          <div>
+          <div className="TopBar">
             <Navbar color="faded" light expand="md">
               <NavbarBrand >YRG</NavbarBrand>
                 <Nav className="ml-auto">
@@ -34,7 +34,6 @@ render() {
                     <button className="Server" onClick={this.handleTopBarClick}>Server</button>
                 </Nav>
             </Navbar>
-
           </div>
         );
       }

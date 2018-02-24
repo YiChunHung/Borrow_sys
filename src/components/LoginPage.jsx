@@ -29,13 +29,13 @@ export default class LoginPage extends React.Component{
 					<Navbar color="faded" light expand="md">
 			        	<NavbarBrand >YRG</NavbarBrand>
 			        </Navbar>
-					<form id="login">
+					<form className="login">
 						Username：<br/>
-					  	<input type="text" name="username" id="username"/><br/>
+					  	<input type="text" id="username" placeholder="your username"/><br/>
 
 					  	Password：<br/>
-					  	<input type="text" name="password" id="password"/><br/><br/>
-					  	<button type="button" onClick={this.handleClick}>Login</button>
+					  	<input type="password" id="password" placeholder="your password"/><br/><br/>
+					  	<button type="button" id="loginbutton" onClick={this.handleClick}>Login</button>
 					</form>
 				</div>	
 			)

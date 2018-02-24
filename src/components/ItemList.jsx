@@ -50,9 +50,9 @@ export default class ItemList extends React.Component {
       <div>
         <h2>Selected Item List</h2>
         {this.props.selectedItems.map(this.showSelectedList)}
-        <Form>
+        <Form width="100%">
           <FormGroup>
-            <Input type="select" className="itemList" id="exampleSelect" onChange={this.toggle}>
+            <Input type="select" id="exampleSelect" onChange={this.toggle}>
               {this.props.item.map(this.showList)}
             </Input>
           </FormGroup>

@@ -41,6 +41,7 @@ export default class Borrowpage extends React.Component {
     })
     .then(function(response) {
       if (!response.data.validation) {
+        console.log(response.data)
         var item_iid = response.data.payload.map(function(item){return(item.iid)}); 
         var item_name = response.data.payload.map(function(item){return(item.item_name)});
         var item = response.data.payload.map(function(item){return [item.iid, item.item_name]});
@@ -196,6 +197,7 @@ export default class Borrowpage extends React.Component {
       timeout: 1000,
     }).then(function(response){
       if (!response.data.validation) {
+        console.log(response.data);
         this.setState({
         statusReadResponse: response.data.payload, 
         disabled:true,
@@ -225,28 +227,36 @@ export default class Borrowpage extends React.Component {
     }
 
     return (
-      <div>
-        <div id = "ItemList">
-        	<ItemList 
-        		choosedItems = {this.toggleItemList}
-        		selectedItems = {this.state.selectedItems}
-        		item = {this.state.item}
-            restoreItems = {this.restoreItems}
-        	/>
-        </div>
-        <div id = "Calendar"> 
-          <Calendar
-            onChangeMonth={(date) => this.setState({date})}
-            date = {this.state.date}
-            choosedDays = {this.toggleCalendar}
-            selectedDays = {this.state.selectedDays}
-          />
-        </div>
-        <button onClick = {this.sendDateId} id = "sendDateId" disabled = {this.state.disabled}>
-          Enter
-        </button>
-        {isShow}
-      </div>
+      <table width="100%">
+        <tbody>
+          <tr>
+            <td id = "ItemList" width="50%">
+            	<ItemList 
+            		choosedItems = {this.toggleItemList}
+            		selectedItems = {this.state.selectedItems}
+            		item = {this.state.item}
+                restoreItems = {this.restoreItems}
+            	/>
+            </td>
+            <td id = "Calendar" width="50%"> 
+              <Calendar
+                onChangeMonth={(date) => this.setState({date})}
+                date = {this.state.date}
+                choosedDays = {this.toggleCalendar}
+                selectedDays = {this.state.selectedDays}
+              />
+              <button onClick = {this.sendDateId} id = "sendDateId" disabled = {this.state.disabled}>
+                Enter
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {isShow}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     );
   }
 }
