@@ -1,9 +1,15 @@
 #ItemList {
-
+	vertical-align: top;
+	padding: 0px 20px;
 }
 
 #Calendar {
+	vertical-align: top;
+	padding: 0px 20px;
+}
 
+#Calendar-button {
+	text-align: right;
 }
 
 #TimeTable {
@@ -15,9 +21,8 @@
 }
 
 #sendDateId {
-	width: 11%;
+	width: 30%;
 	height: 5%;
-
 }
 
 #sendDateId:focus {

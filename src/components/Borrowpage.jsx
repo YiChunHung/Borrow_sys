@@ -238,13 +238,17 @@ export default class Borrowpage extends React.Component {
                 restoreItems = {this.restoreItems}
             	/>
             </td>
-            <td id = "Calendar" width="50%"> 
+            <td id = "Calendar" width="50%">   
               <Calendar
                 onChangeMonth={(date) => this.setState({date})}
                 date = {this.state.date}
                 choosedDays = {this.toggleCalendar}
                 selectedDays = {this.state.selectedDays}
               />
+            </td>
+          </tr>
+          <tr>
+            <td id="Calendar-button">
               <button onClick = {this.sendDateId} id = "sendDateId" disabled = {this.state.disabled}>
                 Enter
               </button>

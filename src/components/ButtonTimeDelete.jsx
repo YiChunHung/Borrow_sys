@@ -35,7 +35,7 @@ export default class ButtonTimeDelete extends React.Component{
 		return(
 			<div>
 			<p>
-				{this.props.item}
+				{this.props.item}({this.props.chName})
 				{this.checkUser()}
 			</p>
 			</div>

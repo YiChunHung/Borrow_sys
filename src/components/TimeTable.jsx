@@ -134,15 +134,15 @@ export default class TimeTable extends React.Component{
 			for(var i=0; i<classObj.props.statusReadResponse.length; i++){
 				var APIstart = new Date(classObj.props.statusReadResponse[i].time_start);
 				if(morningBlock.start.toString() == APIstart.toString()){
-					var morningItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid}
+					var morningItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid, "chName":classObj.props.statusReadResponse[i].ch_name}
 					morningBlock.id.push(morningItemId);
 				}
 				if(afternoonBlock.start.toString() == APIstart.toString()){
-					var afternoonItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid}
+					var afternoonItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid, "chName":classObj.props.statusReadResponse[i].ch_name}
 					afternoonBlock.id.push(afternoonItemId);
 				}
 				if(nightBlock.start.toString() == APIstart.toString()){
-					var nightItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid}
+					var nightItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid, "chName":classObj.props.statusReadResponse[i].ch_name}
 					nightBlock.id.push(nightItemId);
 				}
 			}
@@ -161,7 +161,7 @@ export default class TimeTable extends React.Component{
 			} else {
 				const morningButtonDelete = morningBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid} chName={item.chName}/>)
 					}
 				);
 				morningButton = (
@@ -176,7 +176,7 @@ export default class TimeTable extends React.Component{
 			} else {
 				const afternoonButtonDelete = afternoonBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}  chName={item.chName}/>)
 					}
 				);
 				afternoonButton = (
@@ -191,7 +191,7 @@ export default class TimeTable extends React.Component{
 			} else {
 				const nightButtonDelete = nightBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}  chName={item.chName}/>)
 					}
 				);
 				nightButton = (
@@ -318,7 +318,6 @@ export default class TimeTable extends React.Component{
 				return date[2]
 			}
 		);
-
 		return (
 			<div>
 	     		<table className="Table">
