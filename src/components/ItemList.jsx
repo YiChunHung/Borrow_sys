@@ -2,10 +2,15 @@ import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import { Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import 'components/itemList.css'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 
 export default class ItemList extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      ifClick: false
+    }
     this.showList = this.showList.bind(this);
     this.showSelectedList = this.showSelectedList.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -15,6 +20,9 @@ export default class ItemList extends React.Component {
   toggle(e) {
     var item = document.getElementById("exampleSelect").value
     this.props.choosedItems(item)
+    this.setState({
+      ifClick: !this.state.ifClick
+    })
   }
 
   restoreItem(e) {
@@ -23,11 +31,20 @@ export default class ItemList extends React.Component {
   }
 
   showList(item) {
-    return(
-      <option key={item} className="singleItem">
-        {item}
-      </option>
-    )
+    if (item[0] == '-') {
+      return(
+        <option key={item} className="singleItem" disabled="true" style={{color: "#bebebe",  "align":"center"}} >
+          {item}
+        </option>
+      )
+    }
+    else {
+      return(
+        <option key={item} className="singleItem" style={{color: this.props.selectedItems.includes(item)? "blue":"black"}}>
+          {item}
+        </option>
+      )
+    }
   }
 
   showSelectedList(item) {
@@ -49,14 +66,9 @@ export default class ItemList extends React.Component {
     return (
       <div>
         <h2>Selected Item List</h2>
-        {this.props.selectedItems.map(this.showSelectedList)}
-        <Form width="100%">
-          <FormGroup>
-            <Input type="select" id="exampleSelect" onChange={this.toggle}>
-              {this.props.item.map(this.showList)}
-            </Input>
-          </FormGroup>
-        </Form>
+        <select className="itemList" id="exampleSelect" onClick={this.toggle} size="6" style={{width:"100%"}}>
+          {this.props.item.map(this.showList)}
+        </select>
       </div>
     );
   }
