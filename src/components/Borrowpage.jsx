@@ -266,6 +266,7 @@ export default class Borrowpage extends React.Component {
                         statusReadResponse={this.state.statusReadResponse}
                         uid={this.props.uid}
                         token={this.props.token}
+                        refreshPage={this.props.refreshPage}
                     />
                   </div>);
     }

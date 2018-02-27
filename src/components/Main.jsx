@@ -9,8 +9,7 @@ export default class Main extends React.Component {
   constructor(props) {
         super(props);
         this.state = {
-          //pageNum:1
-          pageNum:2
+          pageNum:1
         }
         this.handleChangePage = this.handleChangePage.bind(this);
   		this.switchPage = this.switchPage.bind(this);
@@ -24,7 +23,7 @@ export default class Main extends React.Component {
     //console.log(this.props.token);
   	if (this.state.pageNum==2){
   		return (
-    		<Borrowpage uid={this.props.uid} token={this.props.token} />
+    		<Borrowpage uid={this.props.uid} token={this.props.token} refreshPage={this.handleChangePage}/>
   		)
   	}
     

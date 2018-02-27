@@ -8,10 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 window.onload = function() {
     ReactDOM.render(
         <div>
-        	{/*
             	<LoginPage />
-        	*/}
-        	<Main uid={1} token={"PiKoSivltx"}/>
         </div>,
         document.getElementById('root')
     );

@@ -282,7 +282,8 @@ export default class TimeTable extends React.Component{
 			});
 		}*/
 
-		window.location.reload();
+		this.props.refreshPage(1);
+		//window.location.reload();
 
 	}
 
