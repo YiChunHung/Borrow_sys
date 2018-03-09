@@ -4,7 +4,9 @@ import ButtonTimeAvailable from 'components/ButtonTimeAvailable.jsx';
 import ButtonTimeDelete from 'components/ButtonTimeDelete.jsx';
 import 'components/TimeTable.css';
 import API from 'components/TestAPI.json'
-
+import config from 'components/config.json'
+import moment from 'moment'
+import axios from 'axios'
 
 export default class TimeTable extends React.Component{
 	constructor(props){
@@ -13,6 +15,7 @@ export default class TimeTable extends React.Component{
 		this.handleAvailbleClick = this.handleAvailbleClick.bind(this);
 		this.handleBlockTime = this.handleBlockTime.bind(this);
 		this.handleFrontTime = this.handleFrontTime.bind(this);
+		this.handleOutput = this.handleOutput.bind(this);
 		this.state = {
 			create:[],
 			delete:[]
@@ -20,7 +23,7 @@ export default class TimeTable extends React.Component{
 	};
 
 	handleDeletedClick(sid){
-		const deletedItemArray = {sid:sid};
+		const deletedItemArray = sid;
 
 		const isDeletedDuplicate = this.state.delete.map(
 			function(deleteItem){
@@ -46,19 +49,23 @@ export default class TimeTable extends React.Component{
 		}
 	};
 
-	handleAvailbleClick(time){
+	handleAvailbleClick(timeStartIn, timeEndIn){
+		const timeStart = moment(timeStartIn).format('YYYY-M-D HH:mm:ss');
+		const timeEnd = moment(timeEndIn).format('YYYY-M-D HH:mm:ss');
+
 		const itemArray = this.props.item.map(
 			function(item){
 				var createNew = {
-					iid:item.iid,
-					date:time
+					"iid":item,
+					"time_start":timeStart,
+					"time_end":timeEnd
 				};
 				return createNew;
 			}
 		);
 		const isDuplicate = this.state.create.map(
 			function(create){
-				if (create.date[0].toString()==time[0].toString()) 
+				if (create.time_start.toString()==timeStart.toString()) 
 					return true;
 				else 
 					return false;
@@ -79,7 +86,7 @@ export default class TimeTable extends React.Component{
 		}
 	};
 
-	handleBlockTime(handleAvailbleClick, handleDeletedClick){
+	handleBlockTime(handleAvailbleClick, handleDeletedClick, classObj){
 		const timeBlocks = {
 			"morning":
 			{
@@ -97,7 +104,9 @@ export default class TimeTable extends React.Component{
 				"end":[23,59,59]
 			}
 		}
+		//console.log(classObj)
 		return function(dateIn, index){
+			//console.log(moment(dateIn).format('YYYY-M-D HH:mm:ss'))
 			var morningBlock = {
 				"start":new Date(dateIn),
 				"end":new Date(dateIn),
@@ -122,18 +131,18 @@ export default class TimeTable extends React.Component{
 			nightBlock.start.setHours(timeBlocks.night.start[0],timeBlocks.night.start[1],timeBlocks.night.start[2]);
 			nightBlock.end.setHours(timeBlocks.night.end[0],timeBlocks.night.end[1],timeBlocks.night.end[2]);
 
-			for(var i=0; i<API.payload.length; i++){
-				var APIstart = new Date(API.payload[i].time_start);
+			for(var i=0; i<classObj.props.statusReadResponse.length; i++){
+				var APIstart = new Date(classObj.props.statusReadResponse[i].time_start);
 				if(morningBlock.start.toString() == APIstart.toString()){
-					var morningItemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
+					var morningItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid, "chName":classObj.props.statusReadResponse[i].ch_name}
 					morningBlock.id.push(morningItemId);
 				}
 				if(afternoonBlock.start.toString() == APIstart.toString()){
-					var afternoonItemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
+					var afternoonItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid, "chName":classObj.props.statusReadResponse[i].ch_name}
 					afternoonBlock.id.push(afternoonItemId);
 				}
 				if(nightBlock.start.toString() == APIstart.toString()){
-					var nightItemId = {"iid":API.payload[i].iid, "sid":API.payload[i].sid}
+					var nightItemId = {"iid":classObj.props.statusReadResponse[i].iid, "sid":classObj.props.statusReadResponse[i].sid, "uid":classObj.props.statusReadResponse[i].uid, "chName":classObj.props.statusReadResponse[i].ch_name}
 					nightBlock.id.push(nightItemId);
 				}
 			}
@@ -142,15 +151,17 @@ export default class TimeTable extends React.Component{
 			var afternoonButton; 
 			var nightButton;
 
+			//console.log(classObj.props)
+
 			if (morningBlock.id.length==0) {
 				morningButton = (
-					<td key={index}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[morningBlock.start,morningBlock.end]}/> </td>
+					<td key={index}> <ButtonTimeAvailable onChange={handleAvailbleClick} timeStart={morningBlock.start} timeEnd={morningBlock.end}/> </td>
 				);
 				
 			} else {
 				const morningButtonDelete = morningBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={item.iid} sid={item.sid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid} chName={item.chName}/>)
 					}
 				);
 				morningButton = (
@@ -160,12 +171,12 @@ export default class TimeTable extends React.Component{
 
 			if (afternoonBlock.id.length==0) {
 				afternoonButton = (
-					<td key={index+7}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[afternoonBlock.start,afternoonBlock.end]}/> </td>
+					<td key={index+7}> <ButtonTimeAvailable onChange={handleAvailbleClick} timeStart={afternoonBlock.start} timeEnd={afternoonBlock.end}/> </td>
 				)
 			} else {
 				const afternoonButtonDelete = afternoonBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={item.iid} sid={item.sid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}  chName={item.chName}/>)
 					}
 				);
 				afternoonButton = (
@@ -175,12 +186,12 @@ export default class TimeTable extends React.Component{
 
 			if (nightBlock.id.length==0) {
 				nightButton = (
-					<td key={index+14}> <ButtonTimeAvailable onChange={handleAvailbleClick} time={[nightBlock.start,nightBlock.end]}/> </td>
+					<td key={index+14}> <ButtonTimeAvailable onChange={handleAvailbleClick} timeStart={nightBlock.start} timeEnd={nightBlock.end}/> </td>
 				)
 			} else {
 				const nightButtonDelete = nightBlock.id.map(
 					function(item, index){
-						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={item.iid} sid={item.sid}/>)
+						return(<ButtonTimeDelete key={index} onChange={handleDeletedClick} item={classObj.props.id2item[item.iid]} sid={item.sid} uid={classObj.props.uid} itemUid={item.uid}  chName={item.chName}/>)
 					}
 				);
 				nightButton = (
@@ -201,6 +212,84 @@ export default class TimeTable extends React.Component{
 		)
 	}
 
+	handleOutput(){
+		
+		if (this.state.create.length){
+			axios({
+				method:'post',
+				url:'/tickets/create',
+				baseURL:config.baseURL+config.port+config.prefix,
+				params:{'operator_uid':this.props.uid, 'token':this.props.token},
+				data:{
+					"data":this.state.create,
+				}
+			}).then(function(response){
+				if (!response.data.validation) {
+					if (this.state.delete.length) {
+						axios({
+							method:'delete',
+							url:'/status/delete',
+							baseURL:config.baseURL+config.port+config.prefix,
+							params:{'operator_uid':this.props.uid, 'token':this.props.token},
+							data:{
+								"sid":this.state.delete
+							}
+						}).then(function(response){
+							if (!response.data.validation) {
+								alert("Success!");
+								this.props.refreshPage(1);
+							} else {
+								alert("Deletion Failed !");
+							}
+
+						}.bind(this));
+					} else {
+						alert("Success!")
+						this.props.refreshPage(1);
+					}
+				} else {
+					alert("Borrow Failed !");
+				}
+			}.bind(this));
+		} else {
+			if (this.state.delete.length) {
+				axios({
+					method:'delete',
+					url:'/status/delete',
+					baseURL:config.baseURL+config.port+config.prefix,
+					params:{'operator_uid':this.props.uid, 'token':this.props.token},
+					data:{
+						"sid":this.state.delete
+					}
+				}).then(function(response){
+					if (!response.data.validation) {
+						alert("Success");
+						this.props.refreshPage(1);
+					} else {
+						alert("Deletion Failed !");
+					}
+
+				}.bind(this));
+			}
+		}
+
+		/*if (this.state.delete.length) {
+			await axios({
+				method:'delete',
+				url:'/status/delete',
+				baseURL:config.baseURL+config.port+config.prefix,
+				params:{'operator_uid':this.props.uid, 'token':this.props.token},
+				data:{
+					"sid":this.state.delete
+				}
+			});
+		}*/
+
+		//this.props.refreshPage(1);
+		//window.location.reload();
+
+	}
+
 	render(){
 		var frontDate = this.props.frontDate;
 		frontDate.sort(
@@ -215,7 +304,7 @@ export default class TimeTable extends React.Component{
 			this.handleFrontTime
 		);
 		const row = frontDate.map(
-			this.handleBlockTime(this.handleAvailbleClick, this.handleDeletedClick)
+			this.handleBlockTime(this.handleAvailbleClick, this.handleDeletedClick, this)
 		);
 
 		const rowMorning = row.map(
@@ -233,30 +322,34 @@ export default class TimeTable extends React.Component{
 				return date[2]
 			}
 		);
-
 		return (
-     		<table className="Table">
-     			<thead>
-     				<tr>
-     					<td>Date</td>
-     					{head}
-     				</tr>
-     			</thead>
-     			<tbody>
-     				<tr>
-     					<td>Morning</td>
-     					{rowMorning}
-     				</tr>
-     				<tr>
-     					<td>Afternoon</td>
-     					{rowAfternoon}
-     				</tr>
-     				<tr>
-     					<td>Night</td>
-     					{rowNight}
-     				</tr>
-     			</tbody>
-     		</table>
+			<div>
+	     		<table className="Table">
+	     			<thead>
+	     				<tr>
+	     					<td>Date</td>
+	     					{head}
+	     				</tr>
+	     			</thead>
+	     			<tbody>
+	     				<tr>
+	     					<td>Morning</td>
+	     					{rowMorning}
+	     				</tr>
+	     				<tr>
+	     					<td>Afternoon</td>
+	     					{rowAfternoon}
+	     				</tr>
+	     				<tr>
+	     					<td>Night</td>
+	     					{rowNight}
+	     				</tr>
+	     			</tbody>
+	     		</table>
+	     		<button onClick={this.handleOutput}>
+	     			Enter
+	     		</button>
+	     	</div>
     	);
 	};
 }

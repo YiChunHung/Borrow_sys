@@ -1,6 +1,7 @@
 import React from 'react';
 import TopBar from 'components/TopBar.jsx'
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import LoginPage from 'components/LoginPage.jsx'
 import Borrowpage from 'components/Borrowpage.jsx'
 
 export default class Main extends React.Component {
@@ -18,22 +19,24 @@ export default class Main extends React.Component {
     this.setState({pageNum:val});
   }
 
-  switchPage(){ 	
+  switchPage(){ 
+    //console.log(this.props.token);
   	if (this.state.pageNum==2){
   		return (
-  			<Borrowpage />
+    		<Borrowpage uid={this.props.uid} token={this.props.token} refreshPage={this.handleChangePage}/>
   		)
   	}
+    
   }
 
 
   render(){
 
     return(
-    	<div>
-      		<TopBar onUpdate={this.handleChangePage}/>
-      		{this.switchPage()}
-      	</div>
+      <div>
+        <TopBar onUpdate={this.handleChangePage}/>
+      	{this.switchPage()}
+      </div>
     );
   }
 }

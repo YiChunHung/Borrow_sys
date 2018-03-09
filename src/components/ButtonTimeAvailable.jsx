@@ -18,7 +18,7 @@ export default class ButtonTimeAvailable extends React.Component{
 		this.setState(
 			{isSelected: !this.state.isSelected}
 		);
-		this.props.onChange(this.props.time);
+		this.props.onChange(this.props.timeStart, this.props.timeEnd);
 		
 	}
 
