@@ -43,13 +43,13 @@ export default class LoginPage extends React.Component{
 	}
 
 
-	async handleClick(){
+	handleClick(){
 		var user = document.getElementById('username');
 		var pwd = document.getElementById('password');
 		//console.log(user.value);
 		//console.log(pwd.value);
 		
-		await axios({
+		axios({
 			method:'get',
 			url: '/auth/login',
 			baseURL:config.baseURL+config.port+config.prefix,
@@ -58,7 +58,7 @@ export default class LoginPage extends React.Component{
 				password: pwd.value
 			}
 		}).then(function(response){
-			//console.log(response);
+			console.log(response);
 			if (!response.data.validation) {
 				this.setState({
 					isLogin : true,

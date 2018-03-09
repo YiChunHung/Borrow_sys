@@ -32,8 +32,8 @@ export default class Borrowpage extends React.Component {
     this.readItem()
   }
 
-  async readItem() {
-    await axios({
+  readItem() {
+    axios({
       method:'get',
       url: '/items/read',
       baseURL:config.baseURL + config.port + config.prefix,

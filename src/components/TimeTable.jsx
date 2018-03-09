@@ -212,10 +212,10 @@ export default class TimeTable extends React.Component{
 		)
 	}
 
-	async handleOutput(){
+	handleOutput(){
 		
 		if (this.state.create.length){
-			await axios({
+			axios({
 				method:'post',
 				url:'/tickets/create',
 				baseURL:config.baseURL+config.port+config.prefix,
@@ -223,10 +223,10 @@ export default class TimeTable extends React.Component{
 				data:{
 					"data":this.state.create,
 				}
-			}).then(async function(response){
+			}).then(function(response){
 				if (!response.data.validation) {
 					if (this.state.delete.length) {
-						await axios({
+						axios({
 							method:'delete',
 							url:'/status/delete',
 							baseURL:config.baseURL+config.port+config.prefix,
@@ -237,13 +237,15 @@ export default class TimeTable extends React.Component{
 						}).then(function(response){
 							if (!response.data.validation) {
 								alert("Success!");
+								this.props.refreshPage(1);
 							} else {
 								alert("Deletion Failed !");
 							}
 
-						});
+						}.bind(this));
 					} else {
 						alert("Success!")
+						this.props.refreshPage(1);
 					}
 				} else {
 					alert("Borrow Failed !");
@@ -251,7 +253,7 @@ export default class TimeTable extends React.Component{
 			}.bind(this));
 		} else {
 			if (this.state.delete.length) {
-				await axios({
+				axios({
 					method:'delete',
 					url:'/status/delete',
 					baseURL:config.baseURL+config.port+config.prefix,
@@ -262,11 +264,12 @@ export default class TimeTable extends React.Component{
 				}).then(function(response){
 					if (!response.data.validation) {
 						alert("Success");
+						this.props.refreshPage(1);
 					} else {
 						alert("Deletion Failed !");
 					}
 
-				});
+				}.bind(this));
 			}
 		}
 
@@ -282,7 +285,7 @@ export default class TimeTable extends React.Component{
 			});
 		}*/
 
-		this.props.refreshPage(1);
+		//this.props.refreshPage(1);
 		//window.location.reload();
 
 	}
